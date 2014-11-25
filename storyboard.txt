@@ -1,0 +1,274 @@
+Era prehistorica desarrollo web
+
+Página HTML 3.0
+
+Programador: "FRONTPAGE" + FTP + Hosting
+
+-------------------------------------------------------------------------
+
+Edad antigua
+
+Scriptcito CGI "*Páginas* web dinámicas"
+
+Diseñador: "Dreamweaver" + "Flash" + "perl?" + FTP + Hosting
+
+
+---------------------------------------------------------------------
+
+Edad moderna
+
+Empieza la pelea
+
+LAMP
+
+Programador: Linux, PHP, Mysql , Apache
+
+                                    FTP + PhpMyadmin
+Diseñador: HTML + Flash
+
+Wamp
+
+--------------------------------------------------------------------
+Edad Contemporanea:
+
+Desarrollador Web [Backend|FULL STACK]: Django + Socket.io + Redis + Celery + Nginx + Gunicorn
+
+Desarrollador Web [Front-End|FULL STACK]: HTML5 + Angular + Yeoman(Gulp, Bower, NPM)
+
+¿FTP? Problema de versiones compatibilidad local y para deployar
+
+----------------------------------------------------------------------
+
+DOCKER al rescate!
+
+---------------------------------------------------------------------
+
+Container vs Máquina virtual
+
+Ventajas:
+- Minimo tiempo de activación, no requiere booteo
+- Consume menos recursos
+- sólo levanta el o los procesos necesarios
+- Ocupa menor espacio.
+- 
+
+
+Desventajas:
+- Performance?
+- Separación más clara de recursos
+- Sólo corre en Linux modernos
+
+----------------------------------------------------
+
+Y Docker?
+
+- Repositorio público o privado de Imágenes
+- DockerFiles
+- Usado y reconocido en la industria: Spotify, New Relic, RackSpace, ebay
+- Entornos altamente portables
+- Control de versiones en containers y DockerFiles
+- Unionfs! (Imágenes más pequeñas, containers mínimos)
+- API REST!!!! 
+-----------------
+
+Cuando usarlo
+
+- Manejar versiones de entornos junto al código de apliaciones 
+- Ambientes CI
+- Entornos desechables
+- Creación rápida y versionada de infraestructura, junto con Vagrant + Ansible
+- Garantizar integridad y portabilidad del sistema que estamos desarrollando (Desarrollo == Producción)
+
+-------------------
+
+Que hay disponible?
+
+https://registry.hub.docker.com
+
+mongoDB
+MySQL
+redis
+Ubuntu
+Debian
+Fedora
+Centos
+Redmine
+Nginx + Django + Mysql
+Gitlab
+Proxys..
+Postfix..
+PostgreSQL
+
+------------------------
+
+Requerimientos:
+
+Versión moderna de Linux  >= 3.8
+
+* Se puede correr en Amazón EC2, VPS como Linode, DigitalOcean, etc.
+* Proximamente disponible en Windows
+* Con Boot2Docker se puede correr en Windows,OSX,*BSD
+
+-----------------------------
+
+Y la CLI para cuando?
+
+
+-----------------------------
+Instalando:
+
+curl -sSL https://get.docker.io/ubuntu/ | sudo sh
+
+Herramient obsoleta nsenter
+Docker 1.3
+----------------------------------
+Creando una Imagen
+
+DockerFiles
+
+FROM ubuntu:12.04
+RUN apt-get update
+RUN apt-get install -y apache2 php5 libapache2-mod-php5 unzip
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+EXPOSE 80:8000
+VOLUME ["/data"]
+ADD http://icecoder.net/download-zip?version=3.0beta /var/www/icecoder.zip
+RUN cd /var/www && unzip -o icecoder.zip
+RUN cd /var/www && mv ICEco* icecoder
+RUN chown www-data -R /var/www/icecoder/lib /var/www/icecoder/backups /var/www/icecoder/test
+RUN mkdir /var/www/projects && chown -R www-data /var/www/projects && chmod g+s /var/www/projects
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"] 
+
+--------------
+
+docker build -t
+
+
+--------------
+
+Creando un container
+
+docker run ubuntu / docker create ubuntu
+-----------------------------------
+
+docker exec -it CONTAINER bash
+
+-------------------------------
+
+docker images
+
+REPOSITORY                              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+shipyard/shipyard-cli                   latest              bea71c37718f        11 days ago         145.6 MB
+shipyard/shipyard                       latest              fefba6922b84        11 days ago         160.4 MB
+sigehos-web                             cops-0.3            8131c8926fdf        3 weeks ago         851.8 MB
+sigehos-web                             cops-0.2            36cfa7d65103        3 weeks ago         844.8 MB
+sigehos-db                              cops-0.1            dbc7e0ebd48d        3 weeks ago         1.457 GB
+docker.dev-tools.msgc.gcba/sigehos-db   cops-0.2            dbc7e0ebd48d        3 weeks ago         1.457 GB
+sigehos-web                             cops-0.1            463ddd312d4d        3 weeks ago         842.5 MB
+ubuntu                                  latest              5506de2b643b        4 weeks ago         197.8 MB
+jpetazzo/nsenter                        latest              f95c04697ce2        5 weeks ago         359.7 MB
+shipyard/rethinkdb                      latest              3321c25168cd        8 weeks ago         269.6 MB
+
+---------------------------------------------------------------
+
+docker ps
+
+CONTAINER ID        IMAGE                       COMMAND                CREATED             STATUS              PORTS                                                                         NAMES
+3d5aa0dc81de        shipyard/shipyard:latest    "/app/controller"      55 minutes ago      Up 34 minutes       0.0.0.0:8080->8080/tcp                                                        goofy_meitner
+ebbc18eab4be        shipyard/rethinkdb:latest   "/usr/bin/rethinkdb    About an hour ago   Up 34 minutes       0.0.0.0:49153->28015/tcp, 0.0.0.0:49154->29015/tcp, 0.0.0.0:49155->8080/tcp   rethinkdb
+
+---------------------------------------------------------------
+docker save
+docker save mynewimage>/tmp/mynewimage.tar 
+
+docker load
+docker load < /tmp/mynewimage.tar
+
+docker export
+docker export 47c>sigehoscontainer.tar
+
+docker import
+docker import - {IMAGEN} <sigehoscontainer
+
+docker tag
+docker tag {IMAGEN} {NUEVO_NOMBRE/URL}
+
+docker commit
+docker commit {CONTAINER} {IMAGEN}
+
+docker push
+docker push {IMAGEN}
+
+docker rm
+docker rm {CONTAINER}
+
+docker rmi
+docker rmi {IMAGEN}
+
+docker stop
+docker stop {CONTAINER}
+
+docker start
+docker start{CONTAINER}
+
+docker run
+
+docker run -d -p 8005:80 --name nginx_prueba dockerfile/nginx
+
+
+Opciones
+-d Correr proceso detachado
+-i Correr proceso interactivamente
+-v directorio_local:volumen_docker
+-net=bridge|none|container:NAME_or_ID|host
+--dns=IP_ADDRESS
+
+Containers linkeados
+
+$ sudo docker run -d --name db training/postgres
+$ sudo docker run -d -P --name web --link db:db training/webapp python app.py
+
+Entornos multiples
+FIG
+
+Fig es una herramienta que sirve para facilmente crear entornos docker, a partir
+de imágenes o dockerfiles
+
+web:
+  image: sigehos-web:cops-0.3
+  ports:
+   - "80"
+   - "8000"
+   - "22"
+  volumes:
+   - ./django:/home/docker/django
+   - ./js:/home/docker/js
+   - ./php:/home/docker/php
+  links:
+   - db
+db:
+  image: sigehos-db:cops-0.1
+
+
+fig scale web=1
+fig ps
+
+Otras Herramienta ShipYard, Panamax
+
+docker run -d -P --name rethinkdb shipyard/rethinkdb
+docker run -d -p 8080:8080 --link rethinkdb:rethinkdb shipyard/shipyard
+
+Gracias!
+Preguntas?
+ska@lanux.org.ar
+
+
+
+
+
+
+
+
+

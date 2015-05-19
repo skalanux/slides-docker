@@ -17,7 +17,6 @@
     "docker-images.md",
     "docker-ps.md",
     "docker-save.md",
-    "docker-export.md",
     "docker-tag.md",
     "docker-commit.md",
     "docker-push.md",
@@ -26,8 +25,8 @@
     "docker-stopstart.md",
     "docker-run.md",
     "linkeando-containers.md",
-    "fig.md",
-    "comandos-fig.md",
+    "docker-compose.md",
+    "comandos-compose.md",
     "otras-herramientas.md",
     "gracias.md"
 ]

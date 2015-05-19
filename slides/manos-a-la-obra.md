@@ -2,5 +2,5 @@
 
     curl -sSL https://get.docker.io/ubuntu/ | sudo sh
 
-Docker 1.3
+Docker 1.6
 
